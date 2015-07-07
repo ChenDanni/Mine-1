@@ -32,7 +32,7 @@ public class JMineSweeper {
  		mineNumberModel.addObserver(ui.mineNum);
  		mineBoardModel.addObserver(ui.getMineBoard());
  		//记录数据用
- 		ui.recordDialog = new RecordDialogs(ui.getMainFrame(), statisticModel.statisticDao.getStatistic());
+ 		ui.recordDialog = new RecordDialogs(ui.getMainFrame(), statisticModel.statisticDao.getStatistic(), statisticModel);
  		
  		OperationQueue operationQueue = new OperationQueue(mineBoardModel, gameModel);
  		Thread operationThread = new Thread(operationQueue);

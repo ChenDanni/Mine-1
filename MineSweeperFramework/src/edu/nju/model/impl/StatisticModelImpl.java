@@ -1,11 +1,10 @@
 package edu.nju.model.impl;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.util.ArrayList;
 
 import edu.nju.model.data.StatisticData;
+import edu.nju.model.po.IOoperation;
+import edu.nju.model.po.StaPO;
 import edu.nju.model.po.StaPOs;
 import edu.nju.model.service.StatisticModelService;
 import edu.nju.model.state.GameResultState;
@@ -19,46 +18,41 @@ public class StatisticModelImpl extends BaseModel implements StatisticModelServi
 		statisticDao = new StatisticData();
 		
 		//读文件
-		FileInputStream fin = null;
-		ObjectInputStream oin = null;
-		
-		try {
-			fin = new FileInputStream(new File("data.txt"));
-			oin = new ObjectInputStream(fin);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Object ob = null;
-		try {
-			ob = oin.readObject();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	
-		if(ob != null){
-			statisticDao.saveStatistic((StaPOs) ob);
-			System.out.println("sucess!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-		}else {
-			System.out.println("not found-----------------------------");
-		}
+		StaPOs ob = IOoperation.read();
+		statisticDao.saveStatistic(ob);
 		
 	}
 
 	@Override
-	public void recordStatistic(GameResultState result, int time) {
+	public void recordStatistic(GameResultState result, int time, String level) {
 		// TODO Auto-generated method stub
+		
+		StaPOs stas = statisticDao.getStatistic();
+		ArrayList<StaPO> staList = stas.stas;
+		
+		//更新数据
+		for (int i = 0; i < staList.size(); i++) {
+			StaPO sta = staList.get(i);
+			if (sta.getLevel().equals(level)) {
+				if (result == GameResultState.SUCCESS) {
+					sta.addWin();
+				}else {
+					sta.addSum();
+				}
+			}
+		}
+		IOoperation.print(statisticDao.getStatistic());
+		
+		//写入文件
+		IOoperation.write(stas);
 		
 	}
 
 	@Override
 	public void showStatistics() {
 		// TODO Auto-generated method stub
-		
+		statisticDao.saveStatistic(IOoperation.read());
 	}
+	
 
 }

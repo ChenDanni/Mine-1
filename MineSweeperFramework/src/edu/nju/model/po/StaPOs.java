@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class StaPOs implements Serializable{
 	
-	private ArrayList<StaPO> stas;
+	public ArrayList<StaPO> stas;
 	
 	public StaPOs(ArrayList<StaPO> stas){
 		this.stas = stas;

@@ -67,9 +67,11 @@ public class ChessBoardModelImpl extends BaseModel implements ChessBoardModelSer
 		blocks.add(block);
 		
 		GameState gameState = GameState.RUN;
+		GameResultState gameResult = GameResultState.INTERRUPT;
 		if(block.isMine()){
 			gameState = GameState.OVER;
-			this.gameModel.gameOver(GameResultState.FAIL);
+//			this.gameModel.gameOver(GameResultState.FAIL);
+			gameResult = GameResultState.FAIL;
 			locked = true;
 			this.chessBoardOver(blocks);
 		}else {
@@ -116,10 +118,14 @@ public class ChessBoardModelImpl extends BaseModel implements ChessBoardModelSer
 		
 		if (checkWin(blocks)) {
 			gameState = GameState.OVER;
-			this.gameModel.gameOver(GameResultState.SUCCESS);
+			gameResult = GameResultState.SUCCESS;
+//			this.gameModel.gameOver(GameResultState.SUCCESS);
 		}
 		
-		super.updateChange(new UpdateMessage("excute",this.getDisplayList(blocks, gameState)));
+		super.updateChange(new UpdateMessage("excute",this.getDisplayList(blocks, gameState, gameResult)));
+		if (gameResult != GameResultState.INTERRUPT) {
+			this.gameModel.gameOver(gameResult);
+		}
 		/***********请在删除上述内容的情况下，完成自己的内容****************/
 		return true;
 	}
@@ -154,7 +160,7 @@ public class ChessBoardModelImpl extends BaseModel implements ChessBoardModelSer
 		}else {
 			op = "excute";
 		}
-		super.updateChange(new UpdateMessage(op,this.getDisplayList(blocks, GameState.RUN)));
+		super.updateChange(new UpdateMessage(op,this.getDisplayList(blocks, GameState.RUN, GameResultState.INTERRUPT)));
 		/***********请在删除上述内容的情况下，完成自己的内容****************/
 		
 		return true;
@@ -311,11 +317,11 @@ public class ChessBoardModelImpl extends BaseModel implements ChessBoardModelSer
 	 * @param gameState
 	 * @return
 	 */
-	private List<BlockVO> getDisplayList(List<BlockPO> blocks, GameState gameState){
+	private List<BlockVO> getDisplayList(List<BlockPO> blocks, GameState gameState, GameResultState gameResult){
 		List<BlockVO> result = new ArrayList<BlockVO>();
 		for(BlockPO block : blocks){
 			if(block != null){
-				BlockVO displayBlock = block.getDisplayBlock(gameState);
+				BlockVO displayBlock = block.getDisplayBlock(gameState, gameResult);
 				if(displayBlock.getState() != null)
 				result.add(displayBlock);
 			}

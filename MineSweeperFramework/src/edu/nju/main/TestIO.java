@@ -1,9 +1,9 @@
 package edu.nju.main;
 
-import edu.nju.model.po.Clear;
+import edu.nju.model.po.IOoperation;
 
 public class TestIO {
 	public static void main(String [] args){
-		Clear.clear();
+		IOoperation.clear();
 	}
 }

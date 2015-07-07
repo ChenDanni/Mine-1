@@ -1,6 +1,7 @@
 package edu.nju.controller.impl;
 
 import edu.nju.controller.msgqueue.OperationQueue;
+import edu.nju.controller.msgqueue.OperationState;
 import edu.nju.controller.service.HostControllerService;
 import edu.nju.model.impl.ChessBoardModelImpl;
 import edu.nju.model.impl.GameModelImpl;
@@ -18,6 +19,9 @@ public class HostControllerImpl implements HostControllerService{
 		GameModelImpl game = (GameModelImpl) OperationQueue.getGameModel();
 		ChessBoardModelImpl chess = (ChessBoardModelImpl) OperationQueue.getChessBoardModel();
 		ParameterModelImpl para = (ParameterModelImpl)chess.parameterModel;
+		
+		OperationQueue.operationState = OperationState.HOST;
+		
 		game.addObserver(host);
 		chess.addObserver(host);
 		para.addObserver(host);

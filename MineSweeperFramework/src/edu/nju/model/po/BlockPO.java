@@ -2,6 +2,7 @@ package edu.nju.model.po;
 
 import edu.nju.model.state.BlockState;
 import edu.nju.model.state.DisplayBlockState;
+import edu.nju.model.state.GameResultState;
 import edu.nju.model.state.GameState;
 import edu.nju.model.vo.BlockVO;
 /**
@@ -28,7 +29,7 @@ public class BlockPO {
 	 * 获得用于在界面上显示的扫雷块
 	 * @return
 	 */
-	public BlockVO getDisplayBlock(GameState gameState){
+	public BlockVO getDisplayBlock(GameState gameState, GameResultState gameResult){
 		DisplayBlockState dbs = null;
 
 		if(state == BlockState.CLICK&&(!isMine)){
@@ -46,7 +47,10 @@ public class BlockPO {
 				dbs = DisplayBlockState.Bomb;
 			}
 			else if((state == BlockState.UNCLICK)&&isMine){
-				dbs = DisplayBlockState.MINE;
+				if (gameResult == GameResultState.SUCCESS) {
+					dbs = DisplayBlockState.FLAG;
+				}
+				else dbs = DisplayBlockState.MINE;
 			}
 			else if(state == BlockState.FLAG&&(!isMine)){
 				dbs = DisplayBlockState.ERROFLAG;

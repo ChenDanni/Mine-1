@@ -26,7 +26,7 @@ public class OperationQueue implements Runnable{
 	private static GameModelService gameModel;
 	
 	//用于网络，客户端传操作。。。
-	public static boolean isClient;
+	public static OperationState operationState;
 	public static ClientService net;
 	//用于网络，区分客户端与主机的操作，获取当前操作
 	public static MineOperation nowOperation;
@@ -38,7 +38,7 @@ public class OperationQueue implements Runnable{
 		chessBoard = chess;
 		gameModel = game;
 		
-		isClient = false;
+		operationState = OperationState.SINGLE;
 	}
 
 	@Override
@@ -47,7 +47,7 @@ public class OperationQueue implements Runnable{
 		while(isRunning){
 			MineOperation operation = getNewMineOperation();
 			nowOperation = operation;
-			if(!isClient) operation.execute();else {
+			if(operationState!= OperationState.CLIENT) operation.execute();else {
 				net.submitOperation(operation);
 			}
 		}

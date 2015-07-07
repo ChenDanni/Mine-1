@@ -5,7 +5,10 @@
  */
 package edu.nju.view;
 
+import java.awt.Dialog;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.HashMap;
@@ -13,6 +16,7 @@ import java.util.Observable;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -55,6 +59,14 @@ import javax.swing.UIManager;
 
 
 
+
+
+
+
+
+
+import edu.nju.controller.msgqueue.OperationQueue;
+import edu.nju.controller.msgqueue.OperationState;
 import edu.nju.model.impl.UpdateMessage;
 import edu.nju.model.vo.GameVO;
 import edu.nju.view.listener.CoreListener;
@@ -107,6 +119,11 @@ public class MainFrame implements Observer {
 	
 	//记录对话框
 	public RecordDialogs recordDialog;
+	//endpanel
+	public JDialog endDialog;
+	public JLabel endLabel;
+	public JButton endButton;
+	public JPanel endPanel;
 
 	public MainFrame() {
 		try {
@@ -152,6 +169,12 @@ public class MainFrame implements Observer {
 		body = new MineBoardPanel(defaultHeight,defaultWidth);
 		coreListener = new CoreListener(this);
 		menuListener = new MenuListener(this);
+		
+		//结束对话框
+		endDialog = new JDialog(mainFrame, "游戏结束", true);
+		endLabel = new JLabel();
+		endButton = new JButton("ok");
+		endPanel = new JPanel();
 	}
 	
 	/**
@@ -261,6 +284,20 @@ public class MainFrame implements Observer {
 		mainFrame.getContentPane().add(body);
 		//build body panel end
 		
+		//build end panel
+		endPanel.add(endLabel);
+		endPanel.add(endButton);
+		endDialog.setContentPane(endPanel);
+		endButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				endDialog.setVisible(false);
+			}
+		});
+		//build end panel end
+		
 		mainFrame.setTitle("JMineSweeper");
 		mainFrame.setIconImage(Images.FRAME_IMAGE);		
 		java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit()
@@ -298,6 +335,9 @@ public class MainFrame implements Observer {
 				
 			}
 		});
+//		
+//		//set endpanel location,size
+//		endDialog.setBounds(mainFrame.getLocation().x+50, mainFrame.getLocation().y+50, 150, 90);
 	}
 
 	public JFrame getMainFrame() {
@@ -345,11 +385,48 @@ public class MainFrame implements Observer {
 			isRunning = true;
 			t = new Thread(new CountTime(time));
 			t.start();
-		}else if(notifingObject.getKey().equals("end")){
+		}else if(notifingObject.getKey().equals("end_Fail")){
 			startButton.setIcon(Images.START_END);
+			//set endpanel location,size
+			endDialog.setBounds(mainFrame.getLocation().x+50, mainFrame.getLocation().y+50, 150, 90);
+			endLabel.setText("you lose!");
+			endDialog.setVisible(true);
 			isRunning = false;
-			//RecordDialog record = new RecordDialog(mainFrame);
-			//record.show();
+			recordDialog.show();
+		}else if (notifingObject.getKey().equals("end_Win")) {
+			startButton.setIcon(Images.START_BEGIN);
+			//set endpanel location,size
+			endDialog.setBounds(mainFrame.getLocation().x+50, mainFrame.getLocation().y+50, 150, 90);
+			endLabel.setText("you win!");
+			endDialog.setVisible(true);
+			isRunning = false;
+			recordDialog.show();
+		}else if (notifingObject.getKey().equals("end_Client_Fail") ||
+				notifingObject.getKey().equals("end_Host_Win")) {
+			isRunning = false;
+			//set endpanel location,size
+			endDialog.setBounds(mainFrame.getLocation().x+50, mainFrame.getLocation().y+50, 150, 90);
+			if (OperationQueue.operationState == OperationState.CLIENT) {
+				startButton.setIcon(Images.START_END);
+				endLabel.setText("you lose!");
+			}else {
+				startButton.setIcon(Images.START_BEGIN);
+				endLabel.setText("you win!");
+			}
+			endDialog.setVisible(true);
+		}else if (notifingObject.getKey().equals("end_Client_Win") ||
+				notifingObject.getKey().equals("end_Host_Fail")) {
+			isRunning = false;
+			//set endpanel location,size
+			endDialog.setBounds(mainFrame.getLocation().x+50, mainFrame.getLocation().y+50, 150, 90);
+			if (OperationQueue.operationState == OperationState.CLIENT) {
+				startButton.setIcon(Images.START_BEGIN);
+				endLabel.setText("you win!");
+			}else {
+				startButton.setIcon(Images.START_END);
+				endLabel.setText("you lose!");
+			}
+			endDialog.setVisible(true);
 		}
 	}
 

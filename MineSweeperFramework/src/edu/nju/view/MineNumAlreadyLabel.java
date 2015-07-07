@@ -6,6 +6,7 @@ import java.util.Observer;
 import javax.swing.JLabel;
 
 import edu.nju.controller.msgqueue.OperationQueue;
+import edu.nju.controller.msgqueue.OperationState;
 import edu.nju.model.impl.UpdateMessage;
 
 public class MineNumAlreadyLabel extends JLabel implements Observer{
@@ -16,7 +17,7 @@ public class MineNumAlreadyLabel extends JLabel implements Observer{
 		// TODO Auto-generated method stub
 		UpdateMessage updateMessage = (UpdateMessage) arg;
 		String key;
-		if (OperationQueue.isClient) {
+		if (OperationQueue.operationState == OperationState.CLIENT) {
 			key = "mineNumC";
 		}else {
 			key = "mineNumH";

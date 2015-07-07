@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import edu.nju.controller.msgqueue.OperationQueue;
+import edu.nju.controller.msgqueue.OperationState;
 import edu.nju.model.service.ChessBoardModelService;
 import edu.nju.model.service.GameModelService;
 import edu.nju.model.service.StatisticModelService;
@@ -42,6 +43,8 @@ public class GameModelImpl extends BaseModel implements GameModelService{
 		levelList.add(new GameLevel(0,"大",30,16,99));
 		levelList.add(new GameLevel(1,"中",16,16,40));
 		levelList.add(new GameLevel(2,"小",9,9,10));
+		
+		level = "小";
 	}
 
 	@Override
@@ -82,9 +85,42 @@ public class GameModelImpl extends BaseModel implements GameModelService{
 		this.gameResultStae = result;
 		this.time = (int)(Calendar.getInstance().getTimeInMillis() - startTime)/1000;
 		
-		this.statisticModel.recordStatistic(result, time);
+		String levelNew;
+		if (level.equals("小")) {
+			levelNew = "easy";
+		}else if (level.equals("中")) {
+			levelNew = "hard";
+		}else if (level.equals("大")) {
+			levelNew = "hell";
+		}else {
+			levelNew = "custom";
+		}
 		
-		super.updateChange(new UpdateMessage("end",this.convertToDisplayGame()));		
+		String key = null;
+		if (OperationQueue.operationState == OperationState.SINGLE) {
+			this.statisticModel.recordStatistic(result, time, levelNew);
+			if (gameResultStae == GameResultState.FAIL) {
+				key = "end_Fail";
+			}else {
+				key = "end_Win";
+			}
+		}else {
+			if (OperationQueue.nowOperation.isClient) {
+				if (gameResultStae == GameResultState.FAIL) {
+					key = "end_Client_Fail";
+				}else {
+					key = "end_Client_Win";
+				}
+			}else {
+				if (gameResultStae == GameResultState.FAIL) {
+					key = "end_Host_Fail";
+				}else {
+					key = "end_Host_Win";
+				}
+			}
+		}
+		
+		super.updateChange(new UpdateMessage(key,this.convertToDisplayGame()));		
 		return false;
 	}
 

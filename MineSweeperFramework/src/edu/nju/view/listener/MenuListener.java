@@ -12,6 +12,7 @@ import edu.nju.controller.impl.HostControllerImpl;
 import edu.nju.controller.impl.MenuControllerImpl;
 import edu.nju.controller.impl.SettingControllerImpl;
 import edu.nju.controller.msgqueue.OperationQueue;
+import edu.nju.controller.msgqueue.OperationState;
 import edu.nju.controller.service.ClientControllerService;
 import edu.nju.controller.service.HostControllerService;
 import edu.nju.controller.service.MenuControllerService;
@@ -60,6 +61,7 @@ public class MenuListener implements ActionListener{
 			settingController.setHellGameLevel();
 			menuController.startGame();
 		} else if (e.getSource() == ui.getMenuItem("custom")) {//生成定制游戏，需要向controller传递棋盘的高、宽和雷数
+			if(OperationQueue.operationState == OperationState.CLIENT) return;
 			CustomDialog customDialog = new CustomDialog(ui.getMainFrame());
 			customDialog.show();
 			settingController.setCustomizedGameLevel(customDialog.getHeight(), customDialog.getWidth(), customDialog.getMineNumber());

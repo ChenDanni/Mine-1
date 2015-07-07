@@ -2,6 +2,7 @@ package edu.nju.controller.impl;
 
 
 import edu.nju.controller.msgqueue.OperationQueue;
+import edu.nju.controller.msgqueue.OperationState;
 import edu.nju.controller.service.ClientControllerService;
 import edu.nju.network.client.ClientInHandlerImpl;
 import edu.nju.network.client.ClientServiceImpl;
@@ -29,7 +30,7 @@ public class ClientControllerImpl implements ClientControllerService{
 		ChessLabelProxy chessLabelProxy = new ChessLabelProxy();
 					
 		OperationQueue.net = client;
-		OperationQueue.isClient = true;
+		OperationQueue.operationState = OperationState.CLIENT;
 		
 		clientH.addObserver(gameProxy);
 		clientH.addObserver(chessProxy);
