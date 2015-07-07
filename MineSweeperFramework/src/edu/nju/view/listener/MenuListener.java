@@ -69,7 +69,7 @@ public class MenuListener implements ActionListener{
 		} else if (e.getSource() == ui.getMenuItem("exit")) {
 			System.exit(0);
 		} else if (e.getSource() == ui.getMenuItem("record")) {//统计胜率信息
-			
+			ui.recordDialog.show();
 		}else if(e.getSource() == ui.getMenuItem("host")){//注册成为主机
 			hostController.serviceetupHost();
 			

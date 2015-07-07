@@ -56,6 +56,9 @@ public class RecordDialogs {
 		clearBtn.setBounds(150, 155, 70, 23);
 		clearBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				IOoperation.clear();
+				statistic.statisticDao.saveStatistic(IOoperation.read());
+				stas = statistic.statisticDao.getStatistic();
 				textPanel.repaint();
 			}
 		});
@@ -81,7 +84,7 @@ public class RecordDialogs {
 	
 	public void show(){
 		statistic.showStatistics();
-		IOoperation.print(stas);
+//		IOoperation.print(stas);
 		stas = statistic.statisticDao.getStatistic();
 		textPanel.repaint();
 		dialog.setVisible( true);
