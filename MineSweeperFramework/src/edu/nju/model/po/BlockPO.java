@@ -47,7 +47,7 @@ public class BlockPO {
 				dbs = DisplayBlockState.Bomb;
 			}
 			else if((state == BlockState.UNCLICK)&&isMine){
-				if (gameResult == GameResultState.SUCCESS) {
+				if (gameResult == GameResultState.SUCCESS || gameResult == GameResultState.TIE) {
 					dbs = DisplayBlockState.FLAG;
 				}
 				else dbs = DisplayBlockState.MINE;

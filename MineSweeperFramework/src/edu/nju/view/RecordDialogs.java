@@ -94,7 +94,7 @@ public class RecordDialogs {
 
 		DescribeTextPanel() {
 			super();
-			setBounds(0, 0, 290, 140);
+			setBounds(0, 0, 290, 130);
 		}
 
 		public void paintComponent(java.awt.Graphics g) {
@@ -102,10 +102,16 @@ public class RecordDialogs {
 			g.setFont(new Font("Monospaced", Font.PLAIN, 12));
 //			int length = names.length;
 //			System.out.println(stas.stas.size());
+			g.drawString("难度", 20, 30);
+			g.drawString("胜场/总共", 90, 30);
+			g.drawString("胜率", 170, 30);
+			g.drawString("最短时间", 220, 30);
 			for (int i = 0; i < stas.stas.size(); i++) {
 				StaPO sta = stas.stas.get(i);
-				g.drawString(sta.getLevel(), 20, 30 * (i + 1));
-				g.drawString(sta.getWin()+"/"+sta.getSum(),150, 30 * (i + 1));
+				g.drawString(sta.getLevel(), 20, 20 * (i + 3));
+				g.drawString(sta.getWin()+"/"+sta.getSum(),105, 20 * (i + 3));
+				g.drawString(sta.getWinRate()+"%", 170, 20*(i+3));
+				g.drawString(sta.getTime()+"", 230, 20*(i+3));
 //				g.drawString(rank[i], 230, 30 * (i + 1));
 			}
 		}

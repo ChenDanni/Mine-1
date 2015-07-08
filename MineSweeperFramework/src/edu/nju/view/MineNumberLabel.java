@@ -23,7 +23,7 @@ public class MineNumberLabel extends JLabel implements Observer {
 			
 			int remainMines = (Integer) updateMessage.getValue();
 			this.setReamainMinesNumber(remainMines);
-			this.setText(remainMines+"");
+			this.setText("剩余："+remainMines+"");
 		}
 
 	}

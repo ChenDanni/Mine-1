@@ -98,14 +98,17 @@ public class GameModelImpl extends BaseModel implements GameModelService{
 		
 		String key = null;
 		if (OperationQueue.operationState == OperationState.SINGLE) {
-			this.statisticModel.recordStatistic(result, time, levelNew);
 			if (gameResultStae == GameResultState.FAIL) {
+				time = 999;
 				key = "end_Fail";
 			}else {
 				key = "end_Win";
 			}
+			this.statisticModel.recordStatistic(result, time, levelNew);
 		}else {
-			if (OperationQueue.nowOperation.isClient) {
+			if (gameResultStae == GameResultState.TIE) {
+				key = "tie";
+			}else if (OperationQueue.nowOperation.isClient) {
 				if (gameResultStae == GameResultState.FAIL) {
 					key = "end_Client_Fail";
 				}else {

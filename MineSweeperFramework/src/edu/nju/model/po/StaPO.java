@@ -9,22 +9,32 @@ public class StaPO implements Serializable{
 	private int win;
 	private double winRate;
 	private String level;
+	private int time;
 	
-	public StaPO(int sum, int win, String level){
+	public StaPO(int sum, int win, String level, int time){
 		this.sum = sum;
 		this.win = win;
 		this.level = level;
+		this.time = time;
 	}
 	
 	public void addSum(){
 		this.sum ++;
-		this.winRate = win/sum;
+		this.winRate = ((double)win/sum)*100;
 	}
 	
 	public void addWin(){
 		this.win ++;
 		this.sum ++;
-		this.winRate = win/sum;
+		this.winRate = ((double)win/sum)*100;
+	}
+	
+	public boolean setTime(int time){
+		if (time<this.time) {
+			this.time = time;
+			return true;
+		}
+		return false;
 	}
 	
 	public int getSum(){
@@ -41,5 +51,8 @@ public class StaPO implements Serializable{
 	
 	public double getWinRate(){
 		return winRate;
+	}
+	public int getTime(){
+		return this.time;
 	}
 }

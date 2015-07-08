@@ -117,7 +117,7 @@ public class ChessBoardModelImpl extends BaseModel implements ChessBoardModelSer
 			}
 		}
 		
-		if (checkWin(blocks)) {
+		if (OperationQueue.operationState == OperationState.SINGLE && checkWin(blocks)) {
 			gameState = GameState.OVER;
 			gameResult = GameResultState.SUCCESS;
 //			this.gameModel.gameOver(GameResultState.SUCCESS);
@@ -164,6 +164,9 @@ public class ChessBoardModelImpl extends BaseModel implements ChessBoardModelSer
 						if ((OperationQueue.nowOperation.isClient && parameterModel.clientNum>parameterModel.hostNum)
 								||(!OperationQueue.nowOperation.isClient && parameterModel.clientNum<parameterModel.hostNum)){
 							gameResult = GameResultState.SUCCESS;
+							gameState = GameState.OVER;
+						}else if (parameterModel.clientNum == parameterModel.hostNum) {
+							gameResult = GameResultState.TIE;
 							gameState = GameState.OVER;
 						}else {
 							gameResult = GameResultState.FAIL;

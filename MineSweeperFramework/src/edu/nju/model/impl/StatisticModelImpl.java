@@ -39,6 +39,7 @@ public class StatisticModelImpl extends BaseModel implements StatisticModelServi
 				}else {
 					sta.addSum();
 				}
+				sta.setTime(time);
 			}
 		}
 		IOoperation.print(statisticDao.getStatistic());

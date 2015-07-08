@@ -15,13 +15,13 @@ public class IOoperation {
 	
 	public static void clear(){
 		stas = new ArrayList<StaPO>();
-		sta = new StaPO(0, 0, "easy");
+		sta = new StaPO(0, 0, "easy", 999);
 		stas.add(sta);
-		sta = new StaPO(0, 0, "hard");
+		sta = new StaPO(0, 0, "hard", 999);
 		stas.add(sta);
-		sta = new StaPO(0, 0, "hell");
+		sta = new StaPO(0, 0, "hell", 999);
 		stas.add(sta);
-		sta = new StaPO(0, 0, "custom");
+		sta = new StaPO(0, 0, "custom", 999);
 		stas.add(sta);
 		
 		write(new StaPOs(stas));

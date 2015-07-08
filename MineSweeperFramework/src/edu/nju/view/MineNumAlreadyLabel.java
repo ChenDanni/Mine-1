@@ -26,7 +26,7 @@ public class MineNumAlreadyLabel extends JLabel implements Observer{
 			
 			int mines = (Integer) updateMessage.getValue();
 			this.setMines(mines);
-			this.setText(mines+"");
+			this.setText("已标："+mines+"");
 		}
 		
 	}

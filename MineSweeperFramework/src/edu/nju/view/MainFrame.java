@@ -373,8 +373,14 @@ public class MainFrame implements Observer {
 			GameVO newGame = (GameVO) notifingObject.getValue();
 			int gameWidth = newGame.getWidth();
 			int gameHeight = newGame.getHeight();
-			String level = newGame.getLevel();		
-			restart(gameHeight,gameWidth,level);
+			String level = newGame.getLevel();
+			String key = "Challenge Yourself!";
+			if (OperationQueue.operationState == OperationState.CLIENT) {
+				key = "you are client!";
+			}else if (OperationQueue.operationState == OperationState.HOST) {
+				key = "you are host!";
+			}
+			restart(gameHeight,gameWidth,level, key);
 			startButton.setIcon(Images.START_RUN);
 			
 			if(t != null) {
@@ -427,10 +433,17 @@ public class MainFrame implements Observer {
 				endLabel.setText("you lose!");
 			}
 			endDialog.setVisible(true);
+		}else if (notifingObject.getKey().equals("tie")) {
+			isRunning = false;
+			//set endpanel location,size
+			endDialog.setBounds(mainFrame.getLocation().x+50, mainFrame.getLocation().y+50, 150, 90);
+			endLabel.setText("Tie!");
+			startButton.setIcon(Images.START_BEGIN);
+			endDialog.setVisible(true);
 		}
 	}
 
-	private void restart(int mineBoardHeight,int mineBoardWidth,String type) {
+	private void restart(int mineBoardHeight,int mineBoardWidth,String type,String key) {
 
 		mainFrame.getContentPane().remove(body);
 		body = new MineBoardPanel(mineBoardHeight,mineBoardWidth);
@@ -446,7 +459,7 @@ public class MainFrame implements Observer {
 				* bodyMarginOther, mineBoardHeight * buttonSize + bodyMarginNorth
 				+ bodyMarginOther);
 		body.setBorder(new javax.swing.border.TitledBorder(
-				new javax.swing.border.TitledBorder(""), "Challenge Yourself!",
+				new javax.swing.border.TitledBorder(""), key,
 				javax.swing.border.TitledBorder.CENTER,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION));
 		mainFrame.getContentPane().add(body);
