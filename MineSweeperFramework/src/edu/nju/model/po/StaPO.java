@@ -20,13 +20,15 @@ public class StaPO implements Serializable{
 	
 	public void addSum(){
 		this.sum ++;
-		this.winRate = ((double)win/sum)*100;
+		double temp = (double)win/sum;
+		this.winRate = Double.parseDouble(String.format("%.1f", temp*100));
 	}
 	
 	public void addWin(){
 		this.win ++;
 		this.sum ++;
-		this.winRate = ((double)win/sum)*100;
+		double temp = (double)win/sum;
+		this.winRate = Double.parseDouble(String.format("%.1f", temp*100));
 	}
 	
 	public boolean setTime(int time){
