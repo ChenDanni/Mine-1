@@ -6,6 +6,7 @@ import java.util.List;
 import com.sun.java.swing.plaf.windows.resources.windows;
 
 import edu.nju.controller.msgqueue.OperationQueue;
+import edu.nju.controller.msgqueue.OperationState;
 import edu.nju.model.po.BlockPO;
 import edu.nju.model.service.ChessBoardModelService;
 import edu.nju.model.service.GameModelService;
@@ -18,7 +19,7 @@ import edu.nju.model.vo.BlockVO;
 public class ChessBoardModelImpl extends BaseModel implements ChessBoardModelService{
 	
 	private GameModelService gameModel;
-	public ParameterModelService parameterModel;
+	public ParameterModelImpl parameterModel;
 	
 	private BlockPO[][] blockMatrix;
 
@@ -28,7 +29,7 @@ public class ChessBoardModelImpl extends BaseModel implements ChessBoardModelSer
 	private int mineNum = 0;
 	
 	public ChessBoardModelImpl(ParameterModelService parameterModel){
-		this.parameterModel = parameterModel;
+		this.parameterModel = (ParameterModelImpl)parameterModel;
 	}
 
 	@Override
@@ -142,16 +143,45 @@ public class ChessBoardModelImpl extends BaseModel implements ChessBoardModelSer
 		BlockPO block = blockMatrix[x][y];
 		 
 		BlockState state = block.getState();
-		if(state == BlockState.UNCLICK){
-			if(this.parameterModel.minusMineNum())
-				block.setState(BlockState.FLAG);
-			//this.parameterModel.minusMineNum();
-		}
-		else if(state == BlockState.FLAG){
-			block.setState(BlockState.UNCLICK);
-			this.parameterModel.addMineNum();
-		}
+		GameResultState gameResult = GameResultState.INTERRUPT;
+		GameState gameState = GameState.RUN;
 		
+		if (OperationQueue.operationState == OperationState.SINGLE) {
+			
+			if(state == BlockState.UNCLICK){
+				if(this.parameterModel.minusMineNum())
+					block.setState(BlockState.FLAG);
+			}
+			else if(state == BlockState.FLAG){
+				block.setState(BlockState.UNCLICK);
+				this.parameterModel.addMineNum();
+			}
+		}else {
+			if (state == BlockState.UNCLICK && block.isMine()) {
+				if (this.parameterModel.minusMineNum()) {
+					block.setState(BlockState.FLAG);
+					if (parameterModel.mineNum == 0) {
+						if ((OperationQueue.nowOperation.isClient && parameterModel.clientNum>parameterModel.hostNum)
+								||(!OperationQueue.nowOperation.isClient && parameterModel.clientNum<parameterModel.hostNum)){
+							gameResult = GameResultState.SUCCESS;
+							gameState = GameState.OVER;
+						}else {
+							gameResult = GameResultState.FAIL;
+							gameState = GameState.OVER;
+						}
+					}
+				}
+			}else if (state == BlockState.FLAG) {
+				block.setState(BlockState.UNCLICK);
+				this.parameterModel.addMineNum();
+			}else if (state == BlockState.UNCLICK && !block.isMine()) {
+				if (this.parameterModel.minusMineNum()) {
+					block.setState(BlockState.FLAG);
+					gameResult = GameResultState.FAIL;
+					gameState = GameState.OVER;
+				}
+			}
+		}
 		blocks.add(block);	
 		String op;
 		//区分客户端和主机的标记操作
@@ -160,8 +190,11 @@ public class ChessBoardModelImpl extends BaseModel implements ChessBoardModelSer
 		}else {
 			op = "excute";
 		}
-		super.updateChange(new UpdateMessage(op,this.getDisplayList(blocks, GameState.RUN, GameResultState.INTERRUPT)));
+		super.updateChange(new UpdateMessage(op,this.getDisplayList(blocks, gameState, gameResult)));
 		/***********请在删除上述内容的情况下，完成自己的内容****************/
+		if (gameResult!= GameResultState.INTERRUPT) {
+			this.gameModel.gameOver(gameResult);
+		}
 		
 		return true;
 	}

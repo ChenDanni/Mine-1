@@ -6,9 +6,9 @@ import edu.nju.model.service.ParameterModelService;
 public class ParameterModelImpl extends BaseModel implements ParameterModelService{
 	
 	private int maxMine;
-	private int mineNum;
-	private int hostNum;
-	private int clientNum;
+	public int mineNum;
+	public int hostNum;
+	public int clientNum;
 
 	@Override
 	public boolean setMineNum(int num) {
