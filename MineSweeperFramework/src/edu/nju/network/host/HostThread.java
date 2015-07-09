@@ -6,6 +6,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.*;
 
+import edu.nju.controller.msgqueue.OperationQueue;
+import edu.nju.controller.msgqueue.operation.StartGameOperation;
 import edu.nju.network.Configure;
 
 public class HostThread extends Thread {
@@ -40,11 +42,16 @@ public class HostThread extends Thread {
 				
 			} catch(SocketException se){
 				System.out.println("socket connection is closed!!!");
+				System.out.println("end");
+				OperationQueue.host.stopConnection(OperationQueue.ui);
 				this.close();
 				break;
 			}catch (IOException e1) {
 				// TODO Auto-generated catch block
+				System.out.println("exception");
 				e1.printStackTrace();
+				OperationQueue.host.stopConnection(OperationQueue.ui);
+				break;
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

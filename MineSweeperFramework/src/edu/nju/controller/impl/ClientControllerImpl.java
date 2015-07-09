@@ -4,6 +4,7 @@ package edu.nju.controller.impl;
 import edu.nju.controller.msgqueue.OperationQueue;
 import edu.nju.controller.msgqueue.OperationState;
 import edu.nju.controller.msgqueue.operation.MineOperation;
+import edu.nju.controller.msgqueue.operation.StartGameOperation;
 import edu.nju.controller.service.ClientControllerService;
 import edu.nju.network.client.ClientInHandlerImpl;
 import edu.nju.network.client.ClientServiceImpl;
@@ -34,6 +35,7 @@ public class ClientControllerImpl implements ClientControllerService{
 					
 		OperationQueue.net = client;
 		OperationQueue.operationState = OperationState.CLIENT;
+		OperationQueue.client = this;
 		
 		clientH.addObserver(gameProxy);
 		clientH.addObserver(chessProxy);
@@ -49,12 +51,13 @@ public class ClientControllerImpl implements ClientControllerService{
 	}
 	
 	public boolean stopConnection(){
+		client.submitOperation(new StartGameOperation());
 		client.close();
 		client = null;
 		clientH.deleteObservers();
 		clientH = null;
 		OperationQueue.operationState = OperationState.SINGLE;
-		OperationQueue.getGameModel().startGame();
+		OperationQueue.addMineOperation(new StartGameOperation());
 		return true;
 	}
 

@@ -128,12 +128,12 @@ public class MainFrame implements Observer {
 	public JPanel endPanel;
 
 	public MainFrame() {
-		try {
+		/*try {
 			UIManager
 					.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		}*/
 		componentsInstantiation();
 		initComponents();
 		mainFrame.setVisible(true);
@@ -400,20 +400,20 @@ public class MainFrame implements Observer {
 			t = new Thread(new CountTime(time));
 			t.start();
 		}else if(notifingObject.getKey().equals("end_Fail")){
+			isRunning = false;
 			startButton.setIcon(Images.START_END);
 			//set endpanel location,size
 			endDialog.setBounds(mainFrame.getLocation().x+50, mainFrame.getLocation().y+50, 150, 90);
 			endLabel.setText("you lose!");
 			endDialog.setVisible(true);
-			isRunning = false;
 			recordDialog.show();
 		}else if (notifingObject.getKey().equals("end_Win")) {
+			isRunning = false;
 			startButton.setIcon(Images.START_BEGIN);
 			//set endpanel location,size
 			endDialog.setBounds(mainFrame.getLocation().x+50, mainFrame.getLocation().y+50, 150, 90);
 			endLabel.setText("you win!");
 			endDialog.setVisible(true);
-			isRunning = false;
 			recordDialog.show();
 		}else if (notifingObject.getKey().equals("end_Client_Fail") ||
 				notifingObject.getKey().equals("end_Host_Win")) {

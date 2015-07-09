@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
+import edu.nju.controller.msgqueue.OperationQueue;
 import edu.nju.network.Configure;
 
 public class ClientThread extends Thread {
@@ -42,6 +43,8 @@ public class ClientThread extends Thread {
 			}catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
+				OperationQueue.client.stopConnection();
+				break;
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

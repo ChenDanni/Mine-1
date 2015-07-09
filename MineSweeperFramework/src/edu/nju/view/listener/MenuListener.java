@@ -78,7 +78,7 @@ public class MenuListener implements ActionListener{
 			if (OperationQueue.operationState == OperationState.CLIENT) {
 				clientController.stopConnection();
 			}else if (OperationQueue.operationState == OperationState.HOST) {
-				hostController.stopConnection();	
+				hostController.stopConnection(ui);	
 			}
 		}
 	}

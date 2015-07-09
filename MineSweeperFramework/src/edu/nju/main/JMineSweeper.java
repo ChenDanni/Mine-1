@@ -35,6 +35,7 @@ public class JMineSweeper {
  		ui.recordDialog = new RecordDialogs(ui.getMainFrame(), statisticModel.statisticDao.getStatistic(), statisticModel);
  		
  		OperationQueue operationQueue = new OperationQueue(mineBoardModel, gameModel);
+ 		OperationQueue.ui = ui;
  		Thread operationThread = new Thread(operationQueue);
  		operationThread.start();
  	    try {
