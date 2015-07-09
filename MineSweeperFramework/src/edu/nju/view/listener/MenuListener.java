@@ -72,10 +72,14 @@ public class MenuListener implements ActionListener{
 			ui.recordDialog.show();
 		}else if(e.getSource() == ui.getMenuItem("host")){//注册成为主机
 			hostController.serviceetupHost();
-			
 		}else if(e.getSource() == ui.getMenuItem("client")){//注册成为客户端
-			clientController.setupClient("127.0.0.1");
-			
+			clientController.setupClient("127.0.0.1");	
+		}else if (e.getSource() == ui.getMenuItem("offline")) {
+			if (OperationQueue.operationState == OperationState.CLIENT) {
+				clientController.stopConnection();
+			}else if (OperationQueue.operationState == OperationState.HOST) {
+				hostController.stopConnection();	
+			}
 		}
 	}
 

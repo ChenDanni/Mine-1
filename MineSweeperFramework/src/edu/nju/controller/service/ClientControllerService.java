@@ -9,4 +9,5 @@ public interface ClientControllerService {
 	 * @return
 	 */
 	public boolean setupClient(String ip);
+	public boolean stopConnection();
 }

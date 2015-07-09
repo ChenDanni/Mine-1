@@ -96,6 +96,8 @@ public class MainFrame implements Observer {
 	private JMenu online;
 	private JMenuItem host;
 	private JMenuItem client;
+	//下线
+	private JMenuItem offline;
 	private MineNumberLabel mineNumberLabel;
 	private JButton startButton;
 	private JLabel time;
@@ -162,6 +164,7 @@ public class MainFrame implements Observer {
 		online = new JMenu();
 		host = new JMenuItem();
 		client = new JMenuItem();
+		offline = new JMenuItem();
 		
 		menuItemMap = new HashMap<String,JMenuItem>();
 		group = new ButtonGroup();
@@ -245,6 +248,11 @@ public class MainFrame implements Observer {
 		client.addActionListener(menuListener);
 		online.add(client);
 		menuItemMap.put("client", client);
+		
+		offline.setText("log out");
+		offline.addActionListener(menuListener);
+		online.add(offline);
+		menuItemMap.put("offline", offline);
 		
 		aJMenuBar.add(online);
 		mainFrame.setJMenuBar(aJMenuBar);

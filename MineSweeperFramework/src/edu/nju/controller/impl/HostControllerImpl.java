@@ -11,14 +11,20 @@ import edu.nju.network.host.HostServiceImpl;
 
 public class HostControllerImpl implements HostControllerService{
 
+	HostServiceImpl host;
+	HostInHandlerImpl hostH;
+	GameModelImpl game;
+	ChessBoardModelImpl chess;
+	ParameterModelImpl para;
+	
 	@Override
 	public boolean serviceetupHost() {
 		// TODO Auto-generated method stub
-		HostServiceImpl host = new HostServiceImpl();
-		HostInHandlerImpl hostH = new HostInHandlerImpl();
-		GameModelImpl game = (GameModelImpl) OperationQueue.getGameModel();
-		ChessBoardModelImpl chess = (ChessBoardModelImpl) OperationQueue.getChessBoardModel();
-		ParameterModelImpl para = (ParameterModelImpl)chess.parameterModel;
+		host = new HostServiceImpl();
+		hostH = new HostInHandlerImpl();
+		game = (GameModelImpl) OperationQueue.getGameModel();
+		chess = (ChessBoardModelImpl) OperationQueue.getChessBoardModel();
+		para = (ParameterModelImpl)chess.parameterModel;
 		
 		OperationQueue.operationState = OperationState.HOST;
 		
@@ -29,6 +35,18 @@ public class HostControllerImpl implements HostControllerService{
 			System.out.println("Connecting!!!");
 			game.startGame();
 		}
+		return true;
+	}
+	
+	public boolean stopConnection(){
+		host.close();
+		host = null;
+		game.deleteObserver(host);
+		chess.deleteObserver(host);
+		para.deleteObserver(host);
+		hostH = null;
+		OperationQueue.operationState = OperationState.SINGLE;
+		OperationQueue.getGameModel().startGame();
 		return true;
 	}
 

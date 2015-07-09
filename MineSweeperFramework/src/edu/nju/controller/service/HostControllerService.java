@@ -6,4 +6,5 @@ public interface HostControllerService {
 	 * @return
 	 */
 	public boolean serviceetupHost();
+	public boolean stopConnection();
 }

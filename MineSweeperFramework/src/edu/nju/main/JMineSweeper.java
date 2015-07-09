@@ -42,7 +42,7 @@ public class JMineSweeper {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
- 		menuController.startGame();
+ 		//menuController.startGame();
 	}
 }
 
