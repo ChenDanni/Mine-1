@@ -161,6 +161,7 @@ public class ChessBoardModelImpl extends BaseModel implements ChessBoardModelSer
 				if (this.parameterModel.minusMineNum()) {
 					block.setState(BlockState.FLAG);
 					if (parameterModel.mineNum == 0) {
+						locked = true;
 						if ((OperationQueue.nowOperation.isClient && parameterModel.clientNum>parameterModel.hostNum)
 								||(!OperationQueue.nowOperation.isClient && parameterModel.clientNum<parameterModel.hostNum)){
 							gameResult = GameResultState.SUCCESS;
@@ -182,6 +183,8 @@ public class ChessBoardModelImpl extends BaseModel implements ChessBoardModelSer
 					block.setState(BlockState.FLAG);
 					gameResult = GameResultState.FAIL;
 					gameState = GameState.OVER;
+					this.chessBoardOver(blocks);
+					locked= true;
 				}
 			}
 		}

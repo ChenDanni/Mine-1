@@ -29,7 +29,7 @@ public class OperationQueue implements Runnable{
 	public static GameModelService gameModel;
 	
 	//用于网络，客户端传操作。。。
-	public static OperationState operationState;
+	public static OperationState operationState; //标识
 	public static ClientService net;
 	//用于网络，区分客户端与主机的操作，获取当前操作
 	public static MineOperation nowOperation;
